@@ -1,0 +1,1 @@
+package jp.go.aist.airc.dkirt.rdfstar2vec.walk_generation.data_structures;

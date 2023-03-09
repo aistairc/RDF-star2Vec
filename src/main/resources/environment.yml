@@ -1,0 +1,9 @@
+name: jrdf2vec_env
+channels:
+  - defaults
+dependencies:
+  - python>=3.8
+  - gensim>=4.0
+  - flask>=2.0
+  - numpy>=1.17
+  - requests>=2.27
