@@ -86,3 +86,10 @@ skip-gram>) -size <vector size> -threads <number of threads> -min-count 0 -cap 1
 ```bash
 ./word2vec -train walks.txt -output v100.txt -type 3 -size 100 -threads 4 -min-count 0 -cap 1  
 ```
+
+## Evaluation
+
+Please see [here](https://github.com/aistairc/GEval-forKGRC-RDF-star) for evaluating the embeddings generated using RDF-star2Vec
+
+## Publication
+under review
