@@ -17,7 +17,7 @@ RDF-star2Vec introduces graph walk methods that allow probabilistic transition b
 2. [Representation learning](#representation-learning)
 
 ### Generate walk file
-ex) The source dataset is [rdf-star_ext_ikgrc2023.nt](https://github.com/aistairc/KGRC-RDF-star/rdf-star_ext_ikgrc2023.nt), depth is `8`, probability of qs-walk is `0.5`, probability of oq-walk is `0.5`.
+ex) The source dataset is [rdf-star_ext_ikgrc2023.nt](https://github.com/aistairc/KGRC-RDF-star/blob/main/rdf-star_ext_ikgrc2023.nt), depth is `8`, probability of qs-walk is `0.5`, probability of oq-walk is `0.5`.
 
 You can download the packaged JAR of the latest successful: [here](https://github.com/aistairc/RDF-star2Vec/releases)
 
