@@ -165,7 +165,7 @@ public class Main {
     private static double probabilityFromQtToSubject = DEFAULT_QT2SUBJECT;
     
     /**
-     * Default value to be used for the transition probability from qt to subject.
+     * Default value to be used for the transition probability from object to QT.
      */
     public static final double DEFAULT_OBJECT2QT = 0.5;
     
@@ -173,6 +173,26 @@ public class Main {
      * The transition probability from an object to a quoted triple (QT) node.
      */
     private static double probabilityFromObjectToQt = DEFAULT_OBJECT2QT;
+    
+    /**
+     * Default value to be used for the transition probability from QT to object.
+     */
+    public static final double DEFAULT_QT2OBJECT = 0.0;
+    
+    /**
+     * The transition probability from a QT to an object node.
+     */
+    private static double probabilityFromQtToObject = DEFAULT_QT2OBJECT;
+    
+    /**
+     * Default value to be used for the transition probability from subject to QT.
+     */
+    public static final double DEFAULT_SUBJECT2QT = 0.0;
+    
+    /**
+     * The transition probability from a subject to a quoted triple (QT) node.
+     */
+    private static double probabilityFromSubjectToQt = DEFAULT_SUBJECT2QT;
     
     /**
      * The main method that is executed when running the JAR.
@@ -590,13 +610,13 @@ public class Main {
                         walkDirectory);
                 switch (walkGenerationMode) {
                 	case STAR_RANDOM_WALKS_DUPLICATE_FREE:
-                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
                 		break;
                 	case STAR_MID_WALKS:
-                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
                 		break;
                 	case STAR_MID_WALKS_DUPLICATE_FREE:
-                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+                		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
                 		break;
                 	default:
                 		generatorLight.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory);
@@ -611,16 +631,16 @@ public class Main {
                         walkDirectory);
                 switch (walkGenerationMode) {
                 	case STAR_RANDOM_WALKS:
-                		classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+                		classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
                 		break;
                 	case STAR_RANDOM_WALKS_DUPLICATE_FREE:
-                		classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+                		classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
                 		break;
             		case STAR_MID_WALKS:
-            			classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+            			classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
             			break;
             		case STAR_MID_WALKS_DUPLICATE_FREE:
-            			classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+            			classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
             			break;
             		default:
             			classicGenerator.generateWalks(walkGenerationMode, numberOfThreads, numberOfWalks, depth, window, walkDirectory);
@@ -1272,6 +1292,8 @@ public class Main {
         depth = DEFAULT_DEPTH;
         probabilityFromQtToSubject = DEFAULT_QT2SUBJECT;
         probabilityFromObjectToQt = DEFAULT_OBJECT2QT;
+        probabilityFromQtToObject = DEFAULT_QT2OBJECT;
+        probabilityFromSubjectToQt = DEFAULT_SUBJECT2QT;
         numberOfWalks = DEFAULT_NUMBER_OF_WALKS;
         resourcesDirectory = null;
         rdf2VecInstance = null;
