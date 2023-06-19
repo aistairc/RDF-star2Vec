@@ -521,6 +521,28 @@ public class Main {
             }
         } else probabilityFromObjectToQt = DEFAULT_OBJECT2QT;
         System.out.println("Using transition probability from object to qt " + Double.toString(probabilityFromObjectToQt));
+        
+        String qt2objectText = getValue("-qt2object", args);
+        if (qt2objectText != null) {
+            try {
+                probabilityFromQtToObject = Double.parseDouble(qt2objectText);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse the probability. Using default (" + DEFAULT_QT2OBJECT + ").");
+                probabilityFromQtToObject = DEFAULT_QT2OBJECT;
+            }
+        } else probabilityFromQtToObject = DEFAULT_QT2OBJECT;
+        System.out.println("Using transition probability from qt to object " + Double.toString(probabilityFromQtToObject));
+        
+        String subject2qtText = getValue("-subject2qt", args);
+        if (subject2qtText != null) {
+            try {
+                probabilityFromSubjectToQt = Double.parseDouble(subject2qtText);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse the probability. Using default (" + DEFAULT_SUBJECT2QT + ").");
+                probabilityFromSubjectToQt = DEFAULT_SUBJECT2QT;
+            }
+        } else probabilityFromSubjectToQt = DEFAULT_SUBJECT2QT;
+        System.out.println("Using transition probability from subject to qt " + Double.toString(probabilityFromSubjectToQt));
 
         if (containsIgnoreCase("-noVectorTextFileGeneration", args)) {
             isVectorTextFileGeneration = false;

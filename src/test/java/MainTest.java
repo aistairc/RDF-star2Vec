@@ -554,8 +554,8 @@ class MainTest {
         		"-depth", "8",
         		"-qt2subject", "0.5",
         		"-object2qt", "0.5",
-        		"-qt2object", "0.0",
-        		"-subject2qt", "0.0"};
+        		"-qt2object", "0.5",
+        		"-subject2qt", "0.5"};
         
         /* 
          * MID walks for RDF-star without QT walks
