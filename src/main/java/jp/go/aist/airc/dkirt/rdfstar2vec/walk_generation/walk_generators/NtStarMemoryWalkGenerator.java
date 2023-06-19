@@ -619,11 +619,4 @@ public class NtStarMemoryWalkGenerator extends MemoryStarWalkGenerator {
         super.isParseDatatypeProperties = includeDatatypeProperties;
     }
 
-	@Override
-	public List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth,
-			double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject,
-			double probabilityFromSubjectToQt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

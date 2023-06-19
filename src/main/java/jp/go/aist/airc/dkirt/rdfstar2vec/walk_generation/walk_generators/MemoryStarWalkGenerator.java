@@ -651,10 +651,12 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
      * @param depth         The number of hops to nodes (!).
      * @param probabilityFromQtToSubject	The transition probability from a quoted triple (QT) node to its constituent subjects.
      * @param probabilityFromObjectToQt		The transition probability from an object to a quoted triple (QT) node.
+     * @param probabilityFromQtToObject		The transition probability from a quoted triple (QT) node to its constituent objects.
+     * @param probabilityFromSubjectToQt	The transition probability from a subject to a quoted triple (QT) node.
      * @return A list of walks where each element in the list represents a walk. The walk elements are separated by
      * spaces.
      */
-    public List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
+    public List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
     	List<List<String>> walks = new ArrayList<>();
         boolean isFirstIteration = true;
         Map<String, QuotedTriple> quotedTriples = data.getQuotedTriples();
@@ -665,18 +667,56 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 if (neighbours == null || neighbours.size() == 0) {
                     return new ArrayList<>();
                 }
-                double randFromQtToSubject = Math.random();
-                if (entity.contains("<<") && (randFromQtToSubject < probabilityFromQtToSubject)) {
-                	// entity is a QT node.
-                	// walk from QT to subject
-                	QuotedTriple quotedTriple = quotedTriples.get(entity);
-                	QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
+                ArrayList<String> possibleWalkModes = new ArrayList<String>(); //List of possible walk mode to be executed because the set threshold has been exceeded. {qt2subject, qt2object, subject2qt, object2qt}
+                double randFromObjectToQt = Math.random();
+                double randFromSubjectToQt = Math.random();
+                
+                // Check if the entity is included as an object in the QT
+                List<Triple> triplesInvolvingEntityAsObject = data.getObjectTriplesInvolvingObject(entity);
+                QuotedTriple qtInvolvingEntityAsObject = getRandomQtInvolvingEntityAsObject(entity, triplesInvolvingEntityAsObject, quotedTriples);
+                if (qtInvolvingEntityAsObject != null ) {
+                	if (randFromObjectToQt < probabilityFromObjectToQt) { possibleWalkModes.add("object2qt"); }
+                }
+                
+                // Check if the entity is included as an subject in the QT
+                QuotedTriple qtInvolvingEntityAsSubject = getRandomQtInvolvingEntityAsSubject(entity, neighbours, quotedTriples);
+                if (qtInvolvingEntityAsSubject != null ) {
+                	if (randFromSubjectToQt < probabilityFromSubjectToQt) { possibleWalkModes.add("subject2qt"); }
+                }
 
+                // i.e., first entity is QT
+                if (entity.contains("<<")) {
+                	double randFromQtToSubject = Math.random();
+                    double randFromQtToObject = Math.random();
+                    if (randFromQtToSubject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2subject"); }
+                    if (randFromQtToObject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2object"); }
+                }
+                
+                String mode = getRandomElement(possibleWalkModes);
+                if (mode != null) {
                 	ArrayList<String> individualWalk = new ArrayList<>();
-                	individualWalk.add(quotedTriple.qt);
-                	individualWalk.add(quotedTriple_expanded.subject);
-                	individualWalk.add(quotedTriple_expanded.predicate);
-                	individualWalk.add(quotedTriple_expanded.object);
+                	if (mode.equals("qt2subject")) {
+                		QuotedTriple quotedTriple = quotedTriples.get(entity);
+            			QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
+            			individualWalk.add(quotedTriple.qt);	 // = entity
+            			individualWalk.add(quotedTriple_expanded.subject);
+            			// context-oriented
+            			individualWalk.add(quotedTriple_expanded.predicate);
+            			individualWalk.add(quotedTriple_expanded.object);
+                	} else if (mode.equals("qt2object")) {
+                		QuotedTriple quotedTriple = quotedTriples.get(entity);
+                		QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);           		
+            			individualWalk.add(quotedTriple.qt);	// = entity
+            			individualWalk.add(quotedTriple_expanded.object);
+                	} else if (mode.equals("object2qt")) {
+                		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsObject, quotedTriples);
+                		individualWalk.add(entity);
+                		individualWalk.add(quotedTriple.qt);
+                	} else if (mode.equals("subject2qt")) {
+                		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsSubject, quotedTriples);
+                		individualWalk.add(entity);
+                		individualWalk.add(quotedTriple.qt);
+                	}
                 	walks.add(individualWalk);
                 } else {
                 	for (Triple neighbour : neighbours) {
@@ -696,38 +736,74 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 // loop over current walks
                 for (List<String> walk : walks_tmp) {
                     // get last entity
-                	String lastTripleSubject = walk.get(walk.size() - 3);
-                	String lastTriplePredicate = walk.get(walk.size() - 2);
+                	String lastTripleSubject = "";
+                	String lastTriplePredicate = "";
                     String lastTripleObject = walk.get(walk.size() - 1);
+                	if(walk.size() >= 3) {
+                		lastTripleSubject = walk.get(walk.size() - 3);
+                    	lastTriplePredicate = walk.get(walk.size() - 2);
+                	}
+                	
+                	// get neighbors of lastTripleObject
+                	List<Triple> nextIteration = data.getObjectTriplesInvolvingSubject(lastTripleObject);
+                    if (nextIteration == null) {
+                    	continue;
+                    }
                     
                     String qt_str = "<<" + lastTripleSubject + "-" + lastTriplePredicate + "-" + lastTripleObject + ">>";
+                    
+                    ArrayList<String> possibleWalkModes = new ArrayList<String>(); //List of possible walk mode to be executed because the set threshold has been exceeded. {qt2subject, qt2object, subject2qt, object2qt}
                     double randFromObjectToQt = Math.random();
-                    double randFromQtToSubject = Math.random();
-                    if (quotedTriples.containsKey(qt_str) && (randFromObjectToQt < probabilityFromObjectToQt)) {
-                    	// current entity is included in a QT node.
-                    	// walk from object to QT
-                    	QuotedTriple quotedTriple = quotedTriples.get(qt_str);
-                    	// Check whether the given QT is wrapped with id, and if not, get the QT wrapped with id.
-                    	quotedTriple = envelopeQuotedTriple(quotedTriple, quotedTriples);
-                    	//context-oriented
+                    double randFromSubjectToQt = Math.random();
+                    
+                    // Check if the entity is included as an object in the QT
+                    QuotedTriple qtInvolvingEntityAsObject = quotedTriples.get(qt_str);
+                    if (qtInvolvingEntityAsObject != null ) {
+                    	if (randFromObjectToQt < probabilityFromObjectToQt) { possibleWalkModes.add("object2qt"); }
+                    }
+                    
+                    // Check if the entity is included as an subject in the QT
+                    QuotedTriple qtInvolvingEntityAsSubject = getRandomQtInvolvingEntityAsSubject(lastTripleObject, nextIteration, quotedTriples);
+                    if (qtInvolvingEntityAsSubject != null ) {
+                    	if (randFromSubjectToQt < probabilityFromSubjectToQt) { possibleWalkModes.add("subject2qt"); }
+                    }
+                    
+                    // i.e., first entity is QT
+                    if (lastTripleObject.contains("<<")) {
+                    	double randFromQtToSubject = Math.random();
+                        double randFromQtToObject = Math.random();
+                        if (randFromQtToSubject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2subject"); }
+                        if (randFromQtToObject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2object"); }
+                    }
+                    
+                    String mode = getRandomElement(possibleWalkModes);
+                    if (mode != null) {
                     	List<String> newWalk = new ArrayList<>(walk);
-                    	newWalk.add(quotedTriple.qt);
-                    	walks.remove(walk); // check whether this works
-                    	walks.add(newWalk);
-                    } else if (lastTripleObject.contains("<<") && (randFromQtToSubject < probabilityFromQtToSubject)) {
-                    	// walk from QT to subject
-                    	QuotedTriple quotedTriple = quotedTriples.get(lastTripleObject);
-                    	QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
-
-                    	List<String> newWalk = new ArrayList<>(walk);
-                    	newWalk.add(quotedTriple_expanded.subject);
-                    	newWalk.add(quotedTriple_expanded.predicate);
-                    	newWalk.add(quotedTriple_expanded.object);
+                    	if (mode.equals("qt2subject")) {
+                    		QuotedTriple quotedTriple = quotedTriples.get(lastTripleObject);
+                			QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
+                			newWalk.add(quotedTriple_expanded.subject);
+                			// context-oriented
+                			newWalk.add(quotedTriple_expanded.predicate);
+                			newWalk.add(quotedTriple_expanded.object);
+                    	} else if (mode.equals("qt2object")) {
+                    		QuotedTriple quotedTriple = quotedTriples.get(lastTripleObject);
+                    		QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
+                			newWalk.add(quotedTriple_expanded.object);
+                    	} else if (mode.equals("object2qt")) {
+                    		// Check whether the given QT is wrapped with id, and if not, get the QT wrapped with id.
+                    		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsObject, quotedTriples);
+                    		// context-oriented
+                        	newWalk.add(quotedTriple.qt);
+                        	walks.remove(walk); // check whether this works
+                    	} else if (mode.equals("subject2qt")) {
+                    		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsSubject, quotedTriples);
+                    		newWalk.add(quotedTriple.qt);
+                    	}
                     	walks.add(newWalk);
                     } else {
-                    	List<Triple> nextIteration = data.getObjectTriplesInvolvingSubject(lastTripleObject);
                         if (nextIteration != null) {
-                            walks.remove(walk); // check whether this works
+                        	walks.remove(walk); // check whether this works
                             for (Triple nextStep : nextIteration) {
                                 List<String> newWalk = new ArrayList<>(walk);
                                 newWalk.add(nextStep.predicate);
