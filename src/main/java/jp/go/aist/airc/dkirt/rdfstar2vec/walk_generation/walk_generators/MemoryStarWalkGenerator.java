@@ -1030,8 +1030,7 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 			newWalk.add(quotedTriple_expanded.object);
                     	} else if (mode.equals("qt2object")) {
                     		QuotedTriple quotedTriple = quotedTriples.get(lastTripleObject);
-                    		QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);           		
-                			newWalk.add(quotedTriple.qt);	// = entity
+                    		QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
                 			newWalk.add(quotedTriple_expanded.object);
                     	} else if (mode.equals("object2qt")) {
                     		// Check whether the given QT is wrapped with id, and if not, get the QT wrapped with id.
