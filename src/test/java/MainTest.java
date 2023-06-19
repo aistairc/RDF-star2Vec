@@ -550,7 +550,7 @@ class MainTest {
         		"-graph", kg.getAbsolutePath(), 
         		"-onlyWalks",
         		"-walkDir", directoryName, 
-        		"-walkGenerationMode", "STAR_RANDOM_WALKS_DUPLICATE_FREE",
+        		"-walkGenerationMode", "STAR_RANDOM_WALKS",
         		"-depth", "8",
         		"-qt2subject", "0.5",
         		"-object2qt", "0.5",
@@ -1824,7 +1824,7 @@ class MainTest {
         deleteDirectory("./walksOnly");
         deleteDirectory("./walksOnlyHdt");
         deleteDirectory("./walksOnly2");
-        deleteDirectory("./classicWalks/");
+//        deleteDirectory("./classicWalks/");
         deleteDirectory("./mainWalks/");
         deleteDirectory("./walksOnlyMidWeighted/");
         deleteDirectory("./continue_walks/");
