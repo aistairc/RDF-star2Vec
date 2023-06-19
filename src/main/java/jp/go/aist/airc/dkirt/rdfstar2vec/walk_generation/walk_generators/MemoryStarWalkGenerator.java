@@ -1037,7 +1037,6 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                     		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsObject, quotedTriples);
                     		// context-oriented
                         	newWalk.add(quotedTriple.qt);
-                        	walks.add(newWalk);
                     	} else if (mode.equals("subject2qt")) {
                     		QuotedTriple quotedTriple = envelopeQuotedTriple(qtInvolvingEntityAsSubject, quotedTriples);
                     		newWalk.add(quotedTriple.qt);
