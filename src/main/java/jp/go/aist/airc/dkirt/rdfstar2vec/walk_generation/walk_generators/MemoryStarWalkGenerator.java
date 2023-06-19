@@ -892,6 +892,8 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
      * @param depth         The number of hops to nodes (!).
      * @param probabilityFromQtToSubject	The transition probability from a quoted triple (QT) node to its constituent subjects.
      * @param probabilityFromObjectToQt		The transition probability from an object to a quoted triple (QT) node.
+     * @param probabilityFromQtToObject		The transition probability from a quoted triple (QT) node to its constituent objects.
+     * @param probabilityFromSubjectToQt	The transition probability from a subject to a quoted triple (QT) node.
      * @return A list of walks where each element in the list represents a walk. The walk elements are separated by
      * spaces.
      */
