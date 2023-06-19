@@ -553,7 +553,9 @@ class MainTest {
         		"-walkGenerationMode", "STAR_RANDOM_WALKS_DUPLICATE_FREE",
         		"-depth", "8",
         		"-qt2subject", "0.5",
-        		"-object2qt", "0.5"};
+        		"-object2qt", "0.5",
+        		"-qt2object", "0.0",
+        		"-subject2qt", "0.0"};
         
         /* 
          * MID walks for RDF-star without QT walks
