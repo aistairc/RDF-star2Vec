@@ -5,5 +5,5 @@ import java.util.List;
 public interface IStarRandomWalkDuplicateFreeCapability extends IWalkGenerationCapability{
 
 
-    List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt);
+    List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt);
 }

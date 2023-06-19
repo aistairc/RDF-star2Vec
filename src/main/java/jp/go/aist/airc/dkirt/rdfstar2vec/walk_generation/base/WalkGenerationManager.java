@@ -221,12 +221,12 @@ public class WalkGenerationManager {
     }
     
     public void generateWalks(WalkGenerationMode generationMode, int numberOfThreads, int numberOfWalks, int depth,
-    		int textWalkLength, File walkDirectory, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
+    		int textWalkLength, File walkDirectory, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
     	if (generationMode == null) {
     		System.out.println("walkGeneration mode is null... Using default: RANDOM_WALKS_DUPLICATE_FREE");
     		generationMode = WalkGenerationMode.RANDOM_WALKS_DUPLICATE_FREE;
     	}
-    	generateWalks(generationMode, numberOfThreads, numberOfWalks, depth, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt);
+    	generateWalks(generationMode, numberOfThreads, numberOfWalks, depth, walkDirectory, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
 
     	// optionally generate text walks on top
     	if (isGenerateTextWalks()) {
@@ -251,8 +251,8 @@ public class WalkGenerationManager {
     }
     
     public void generateWalks(WalkGenerationMode mode, int numberOfThreads, int numberOfWalksPerEntity, int depth,
-    		String walkDirectoryPath, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
-    	generateWalks(mode, numberOfThreads, numberOfWalksPerEntity, depth, new File(walkDirectoryPath), probabilityFromQtToSubject, probabilityFromObjectToQt);
+    		String walkDirectoryPath, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
+    	generateWalks(mode, numberOfThreads, numberOfWalksPerEntity, depth, new File(walkDirectoryPath), probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
     }
 
     public void generateWalks(WalkGenerationMode mode, int numberOfThreads, int numberOfWalksPerEntity, int depth,
@@ -261,10 +261,10 @@ public class WalkGenerationManager {
     }
     
     public void generateWalks(WalkGenerationMode mode, int numberOfThreads, int numberOfWalksPerEntity, int depth,
-    		File walkDirectory, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
+    		File walkDirectory, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
     	this.walkDirectory = walkDirectory;
     	generateWalksForEntities(entitySelector.getEntities(), numberOfThreads, numberOfWalksPerEntity, depth,
-    			mode, probabilityFromQtToSubject, probabilityFromObjectToQt);
+    			mode, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
     }
 
     public void generateWalks(WalkGenerationMode mode, int numberOfThreads, int numberOfWalksPerEntity, int depth,
@@ -319,7 +319,7 @@ public class WalkGenerationManager {
      * @param probabilityFromObjectToQt		The transition probability from an object to a quoted triple (QT) node.
      */
     public void generateWalksForEntities(Set<String> entities, int numberOfThreads, int numberOfWalks, int walkLength,
-                                         WalkGenerationMode mode, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
+                                         WalkGenerationMode mode, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
         setOutputFileWriter();
 
         // thread pool
@@ -328,7 +328,7 @@ public class WalkGenerationManager {
                 new java.util.concurrent.ArrayBlockingQueue<>(entities.size()));
 
         for (String entity : entities) {
-            DefaultEntityWalkRunnable th = new DefaultEntityWalkRunnable(this, entity, numberOfWalks, walkLength, mode, probabilityFromQtToSubject, probabilityFromObjectToQt);
+            DefaultEntityWalkRunnable th = new DefaultEntityWalkRunnable(this, entity, numberOfWalks, walkLength, mode, probabilityFromQtToSubject, probabilityFromObjectToQt, probabilityFromQtToObject, probabilityFromSubjectToQt);
             pool.execute(th);
         }
 

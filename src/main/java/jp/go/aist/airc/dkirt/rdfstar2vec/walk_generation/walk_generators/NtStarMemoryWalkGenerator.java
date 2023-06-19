@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -617,4 +618,12 @@ public class NtStarMemoryWalkGenerator extends MemoryStarWalkGenerator {
         }
         super.isParseDatatypeProperties = includeDatatypeProperties;
     }
+
+	@Override
+	public List<String> generateDuplicateFreeStarRandomWalksForEntity(String entity, int numberOfWalks, int depth,
+			double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject,
+			double probabilityFromSubjectToQt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

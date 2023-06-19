@@ -39,6 +39,8 @@ public class DefaultEntityWalkRunnable implements Runnable {
     
     double probabilityFromQtToSubject;
     double probabilityFromObjectToQt;
+    double probabilityFromQtToObject;
+    double probabilityFromSubjectToQt;
 
     /**
      * Constructor.
@@ -72,7 +74,7 @@ public class DefaultEntityWalkRunnable implements Runnable {
      * @param probabilityFromObjectToQt		The transition probability from an object to a quoted triple (QT) node.
      */
     public DefaultEntityWalkRunnable(WalkGenerationManager generator, String entity, int numberOfWalks, int depth,
-                                     WalkGenerationMode mode, double probabilityFromQtToSubject, double probabilityFromObjectToQt) {
+                                     WalkGenerationMode mode, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt) {
     	this.entity = entity;
         this.numberOfWalks = numberOfWalks;
         this.depth = depth;
@@ -80,6 +82,8 @@ public class DefaultEntityWalkRunnable implements Runnable {
         this.walkGenerationMode = mode;
         this.probabilityFromQtToSubject = probabilityFromQtToSubject;
         this.probabilityFromObjectToQt = probabilityFromObjectToQt;
+        this.probabilityFromQtToObject = probabilityFromQtToObject;
+        this.probabilityFromSubjectToQt = probabilityFromSubjectToQt;
     }
 
     /**
@@ -89,14 +93,14 @@ public class DefaultEntityWalkRunnable implements Runnable {
         switch (walkGenerationMode) {
         	case STAR_MID_WALKS:
         		if (walkGenerationManager.getWalkGenerator() instanceof IStarMidWalkCapability) {
-                    walkGenerationManager.writeToFile(((IStarMidWalkCapability) walkGenerationManager.getWalkGenerator()).generateStarMidWalksForEntity(walkGenerationManager.shortenUri(entity), this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt));
+                    walkGenerationManager.writeToFile(((IStarMidWalkCapability) walkGenerationManager.getWalkGenerator()).generateStarMidWalksForEntity(walkGenerationManager.shortenUri(entity), this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt, this.probabilityFromQtToObject, this.probabilityFromSubjectToQt));
                 } else {
                     printNotImplementedWarning();
                 }
                 break;
         	case STAR_MID_WALKS_DUPLICATE_FREE:
                 if(walkGenerationManager.getWalkGenerator() instanceof IStarMidWalkDuplicateFreeCapability){
-                    walkGenerationManager.writeToFile(((IStarMidWalkDuplicateFreeCapability) walkGenerationManager.getWalkGenerator()).generateStarMidWalksForEntityDuplicateFree(walkGenerationManager.shortenUri(entity), this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt));
+                    walkGenerationManager.writeToFile(((IStarMidWalkDuplicateFreeCapability) walkGenerationManager.getWalkGenerator()).generateStarMidWalksForEntityDuplicateFree(walkGenerationManager.shortenUri(entity), this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt, this.probabilityFromQtToObject, this.probabilityFromSubjectToQt));
                 } else LOGGER.error("NOT YET IMPLEMENTED FOR THE CURRENT WALK GENERATOR " + walkGenerationManager.getWalkGenerator().getClass().toString() + "!");
                 break;
         	case STAR_RANDOM_WALKS:
@@ -104,7 +108,7 @@ public class DefaultEntityWalkRunnable implements Runnable {
                     walkGenerationManager.writeToFile(
                             ((IStarRandomWalkCapability) walkGenerationManager.getWalkGenerator())
                                     .generateStarRandomWalksForEntity(walkGenerationManager.shortenUri(entity),
-                                            this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt));
+                                            this.numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt, this.probabilityFromQtToObject, this.probabilityFromSubjectToQt));
                 } else {
                     LOGGER.error("NOT YET IMPLEMENTED FOR THE CURRENT WALK GENERATOR " + walkGenerationManager.getWalkGenerator().getClass().toString() + "!");
                 }
@@ -114,7 +118,7 @@ public class DefaultEntityWalkRunnable implements Runnable {
                     walkGenerationManager
                             .writeToFile(
                                     ((IStarRandomWalkDuplicateFreeCapability) walkGenerationManager.getWalkGenerator())
-                                            .generateDuplicateFreeStarRandomWalksForEntity(walkGenerationManager.shortenUri(entity), numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt));
+                                            .generateDuplicateFreeStarRandomWalksForEntity(walkGenerationManager.shortenUri(entity), numberOfWalks, this.depth, this.probabilityFromQtToSubject, this.probabilityFromObjectToQt, this.probabilityFromQtToObject, this.probabilityFromSubjectToQt));
                 } else {
                     LOGGER.error("NOT YET IMPLEMENTED FOR THIS WALK GENERATOR (" + walkGenerationManager.getWalkGenerator().getClass() + ")!" +
                             " Make sure" +

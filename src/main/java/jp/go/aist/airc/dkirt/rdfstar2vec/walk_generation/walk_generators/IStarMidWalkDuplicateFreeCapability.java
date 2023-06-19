@@ -17,5 +17,5 @@ public interface IStarMidWalkDuplicateFreeCapability extends IWalkGenerationCapa
      * @param probabilityFromObjectToQt The transition probability from an object to a quoted triple (QT) node.
      * @return List where every item is a walk separated by spaces.
      */
-    List<String> generateStarMidWalksForEntityDuplicateFree(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt);
+    List<String> generateStarMidWalksForEntityDuplicateFree(String entity, int numberOfWalks, int depth, double probabilityFromQtToSubject, double probabilityFromObjectToQt, double probabilityFromQtToObject, double probabilityFromSubjectToQt);
 }
