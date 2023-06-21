@@ -417,11 +417,28 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 // predecessor
                 List<Triple> candidates = data.getObjectTriplesInvolvingObject(nextElementPredecessor);
                 Triple drawnTriple = null;
-                if (candidates != null && candidates.size() > 0) {
-                    drawnTriple = randomDrawFromList(candidates);
-                }
                 
                 ArrayList<String> possibleWalkModes = new ArrayList<String>(); //List of possible walk mode to be executed because the set threshold has been exceeded. {qt2subject, qt2object, subject2qt, object2qt}
+                QuotedTriple qtInvolvingEntityAsSubject = null;
+                QuotedTriple qtInvolvingEntityAsObject = null;
+                
+                if (candidates != null && candidates.size() > 0) {
+                    drawnTriple = randomDrawFromList(candidates);
+                    double randFromQtToSubject = Math.random();
+                    double randFromQtToObject = Math.random();
+                    // Check if the entity is included as an subject in the QT
+                    qtInvolvingEntityAsSubject = getRandomQtInvolvingEntityAsSubject(nextElementPredecessor, candidates, quotedTriples);
+                    if (qtInvolvingEntityAsSubject != null) {
+                    	if (randFromQtToSubject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2subject"); }	//successorの方のトリプルと合わせる必要がある
+                    }
+                    
+                    // Check if the entity is included as an object in the QT
+                    qtInvolvingEntityAsObject = getRandomQtInvolvingEntityAsObject(nextElementPredecessor, candidates, quotedTriples);
+                    if (qtInvolvingEntityAsObject != null) {
+                    	if (randFromQtToObject< probabilityFromQtToObject) { possibleWalkModes.add("qt2object"); }
+                    }
+                }
+                
                 // i.e., first entity is QT
                 if (nextElementPredecessor.contains("<<")) {
                 	double randFromObjectToQt = Math.random();
@@ -430,19 +447,7 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                     if (randFromSubjectToQt < probabilityFromSubjectToQt) { possibleWalkModes.add("subject2qt"); }
                 }
                 
-                double randFromQtToSubject = Math.random();
-                double randFromQtToObject = Math.random();
-                // Check if the entity is included as an subject in the QT
-                QuotedTriple qtInvolvingEntityAsSubject = getRandomQtInvolvingEntityAsSubject(nextElementPredecessor, candidates, quotedTriples);
-                if (qtInvolvingEntityAsSubject != null) {
-                	if (randFromQtToSubject < probabilityFromQtToSubject) { possibleWalkModes.add("qt2subject"); }	//successorの方のトリプルと合わせる必要がある
-                }
                 
-                // Check if the entity is included as an object in the QT
-                QuotedTriple qtInvolvingEntityAsObject = getRandomQtInvolvingEntityAsObject(nextElementPredecessor, candidates, quotedTriples);
-                if (qtInvolvingEntityAsObject != null) {
-                	if (randFromQtToObject< probabilityFromQtToObject) { possibleWalkModes.add("qt2object"); }
-                }
                 
                 String mode = getRandomElement(possibleWalkModes);
                 if (mode != null) {
@@ -452,7 +457,8 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 		// context-oriented
                 		result.addLast(quotedTriple_enveloped.predicate);
                 		result.addLast(quotedTriple_enveloped.object);
-                		nextElementPredecessor = quotedTriple_enveloped.object;
+                		nextElementPredecessor = quotedTriple_enveloped.qt;
+                		nextElementSuccessor = quotedTriple_enveloped.object;
                 	} else if (mode.equals("qt2object")) {
                 		QuotedTriple quotedTriple_enveloped = envelopeQuotedTriple(qtInvolvingEntityAsObject, quotedTriples);
                 		result.addFirst(quotedTriple_enveloped.qt);
@@ -468,11 +474,11 @@ public abstract class MemoryStarWalkGenerator implements IWalkGenerator,
                 	} else if (mode.equals("subject2qt")) {
                 		QuotedTriple quotedTriple = quotedTriples.get(nextElementPredecessor);
                 		QuotedTriple quotedTriple_expanded = expandQuotedTriple(quotedTriple, quotedTriples);
-                		result.add(quotedTriple.subject);
-                		nextElementPredecessor = quotedTriple.subject;
+                		result.addFirst(quotedTriple_expanded.subject);
+                		nextElementPredecessor = quotedTriple_expanded.subject;
                 	}
                 } else {
-                	if (candidates != null && candidates.size() > 0) {
+                	if (candidates != null && candidates.size() > 0 && drawnTriple != null) {
                         // add walks from the front (walk started before entity)
                         result.addFirst(drawnTriple.predicate);
                         result.addFirst(drawnTriple.subject);

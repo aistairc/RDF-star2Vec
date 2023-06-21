@@ -550,7 +550,7 @@ class MainTest {
         		"-graph", kg.getAbsolutePath(), 
         		"-onlyWalks",
         		"-walkDir", directoryName, 
-        		"-walkGenerationMode", "STAR_RANDOM_WALKS_DUPLICATE_FREE",
+        		"-walkGenerationMode", "STAR_MID_WALKS_DUPLICATE_FREE",
         		"-depth", "8",
         		"-qt2subject", "0.5",
         		"-object2qt", "0.5",
