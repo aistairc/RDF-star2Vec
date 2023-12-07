@@ -92,4 +92,4 @@ skip-gram>) -size <vector size> -threads <number of threads> -min-count 0 -cap 1
 Please see [here](https://github.com/aistairc/GEval-forKGRC-RDF-star) for evaluating the embeddings generated using RDF-star2Vec
 
 ## Publication
-Shusaku Egami, Takanori Ugai, Masateru Oota, Kyoumoto Matsushita, Takahiro Kawamura, Kouji Kozaki, Ken Fukuda, [RDF-star2Vec: RDF-star Graph Embeddings for Data Mining](./RDF-star2Vec%20-%20RDF-star%20Graph%20Embedings%20for%20Data%20Mining.pdf), IEEE Access, to appear
+Egami, S., Ugai, T., Oota, M., Matsushita, K., Kawamura, T., Kozaki, K., Fukuda, K.: [RDF-star2Vec: RDF-star Graph Embeddings for Data Mining](./RDF-star2Vec%20-%20RDF-star%20Graph%20Embedings%20for%20Data%20Mining.pdf), IEEE Access, to appear
