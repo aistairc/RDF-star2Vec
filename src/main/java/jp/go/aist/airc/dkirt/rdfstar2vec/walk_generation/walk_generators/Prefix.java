@@ -21,9 +21,11 @@ public class Prefix {
 		final String sl = "http://kgc.knowledge-graph.jp/data/SilverBlaze/";
 		final String rp = "http://kgc.knowledge-graph.jp/data/ResidentPatient/";
 		final String kdp = "http://kgc.knowledge-graph.jp/data/predicate/";
-		final String bkr = "http://mor.nlm.nih.gov/bkr/";
-		final String provnir = "http://knoesis.wright.edu/provenir/";
-		final String umls = "http://mor.nlm.nih.gov/umls/";
+		final String wd = "http://www.wikidata.org/entity/";
+		final String ex = "http://example.com/";
+//		final String bkr = "http://mor.nlm.nih.gov/bkr/";
+//		final String provnir = "http://knoesis.wright.edu/provenir/";
+//		final String umls = "http://mor.nlm.nih.gov/umls/";
 		
 		prefixMap.put(kgc, "kgc:");
 		prefixMap.put(sb, "sb:");
@@ -38,9 +40,11 @@ public class Prefix {
 		prefixMap.put(RDF.NS, "rdf:");
 		prefixMap.put(RDFS.NS, "rdfs:");
 		prefixMap.put(OWL.NS, "owl:");
-		prefixMap.put(bkr, "bkr:");
-		prefixMap.put(provnir, "provnir:");
-		prefixMap.put(umls, "umls:");
+		prefixMap.put(wd, "wd:");
+		prefixMap.put(ex, "ex:");
+//		prefixMap.put(bkr, "bkr:");
+//		prefixMap.put(provnir, "provnir:");
+//		prefixMap.put(umls, "umls:");
 		
 	}
 

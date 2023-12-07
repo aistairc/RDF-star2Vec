@@ -25,6 +25,7 @@ import java.util.zip.GZIPOutputStream;
 public class NtMemoryWalkGenerator extends MemoryWalkGenerator {
 
 
+	Prefix pref = new Prefix();
     /**
      * Default logger
      */
@@ -316,6 +317,9 @@ public class NtMemoryWalkGenerator extends MemoryWalkGenerator {
                     String subject = parsed[0];
                     String predicate = parsed[1];
                     String object = parsed[2];
+                    subject = pref.replaceURI(subject).intern();
+                    predicate = pref.replaceURI(predicate).intern();
+                    object = pref.replaceURI(object).intern();
                     data.addObjectTriple(subject, predicate, object);
                 }
             }
@@ -390,6 +394,9 @@ public class NtMemoryWalkGenerator extends MemoryWalkGenerator {
                         String predicate = uriShortenerFunction.apply(removeTags(spo[1]).intern());
                         String[]  objectTokens = Arrays.copyOfRange(spo, 2, spo.length);
                         String object = textProcessingFunction.apply(String.join(" ", objectTokens));
+                        subject = pref.replaceURI(subject).intern();
+                        predicate = pref.replaceURI(predicate).intern();
+                        object = pref.replaceURI(object).intern();
                         if (isWriteOptimizedFile) {
                             writer.write(subject + " " + predicate + " " + object + "\n");
                         }
@@ -408,6 +415,9 @@ public class NtMemoryWalkGenerator extends MemoryWalkGenerator {
                         String subject = uriShortenerFunction.apply(removeTags(spo[0])).intern();
                         String predicate = uriShortenerFunction.apply(removeTags(spo[1]).intern());
                         String object = uriShortenerFunction.apply(removeTags(spo[2])).intern();
+                        subject = pref.replaceURI(subject).intern();
+                        predicate = pref.replaceURI(predicate).intern();
+                        object = pref.replaceURI(object).intern();
                         data.addObjectTriple(subject, predicate, object);
                         if (isWriteOptimizedFile) {
                             writer.write(subject + " " + predicate + " " + object + "\n");

@@ -21,7 +21,7 @@ import java.util.function.UnaryOperator;
  */
 public class NxMemoryWalkGenerator extends MemoryWalkGenerator {
 
-
+	Prefix pref = new Prefix();
     /**
      * Default logger
      */
@@ -142,6 +142,9 @@ public class NxMemoryWalkGenerator extends MemoryWalkGenerator {
                         subject = uriShortenerFunction.apply(removeTags(nx[0].toString()));
                         predicate = uriShortenerFunction.apply(removeTags(nx[1].toString()));
                         object = getTextProcessingFunction().apply(nx[2].toString());
+                        subject = pref.replaceURI(subject).intern();
+                        predicate = pref.replaceURI(predicate).intern();
+                        object = pref.replaceURI(object).intern();
                         data.addDatatypeTriple(subject, predicate, object);
                         continue;
                     } else if (nx[2].toString().startsWith("\"")) continue;
@@ -149,6 +152,9 @@ public class NxMemoryWalkGenerator extends MemoryWalkGenerator {
                     subject = uriShortenerFunction.apply(removeTags(nx[0].toString()));
                     predicate = uriShortenerFunction.apply(removeTags(nx[1].toString()));
                     object = uriShortenerFunction.apply(removeTags(nx[2].toString()));
+                    subject = pref.replaceURI(subject).intern();
+                    predicate = pref.replaceURI(predicate).intern();
+                    object = pref.replaceURI(object).intern();
                     data.addObjectTriple(subject, predicate, object);
                 }
             } catch (FileNotFoundException fnfe) {
