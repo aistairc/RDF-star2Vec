@@ -8,8 +8,10 @@ You can generate embeddings for `N-Triples` file.
 ## Walk strategies
 RDF-star2Vec introduces graph walk methods that allow probabilistic transition between a quoted triple (QT) and its compositional entities.
 
-- qs-walk (from QT to <i>subject</i>): walks from the QT to its compositional entity that is in the role of subject 
+- qs-walk (from QT to <i>subject</i>): walks from the QT to its compositional entity that is in the role of subject. 
 - oq-wal (from <i>object</i> to QT): walks from the compositional entity that is in the role of object to the QT.
+- qo-walk (from QT to <i>object</i>): walks from the QT to its compositional entity that is in the role of object.
+- sq-walk (from <i>subject</i> to QT): walks from the compositional entity that is in the role of subject to the QT.
 
 ## How to use
 
